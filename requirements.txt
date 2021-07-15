@@ -1,0 +1,12 @@
+# main speech recognition module
+vosk
+
+# webvtt subtitle module
+webvtt-py
+
+# grammar check
+language_tool_python
+
+# prerequisites for punctuator2 included via submodule
+numpy
+theano

@@ -1,0 +1,25 @@
+# python environment
+venv/
+
+# vscode
+.vscode/
+
+# input output
+videos/**
+!videos/.gitkeep
+transcriptions/**
+!transcriptions/.gitkeep
+
+# model folders keep but not files in it
+punctuatorModel/**
+!punctuatorModel/.gitkeep
+
+voskModel/**
+!voskModel/.gitkeep
+
+# folder where I copy examples from
+vosk-api-git-clone/
+
+
+__pycache__/**
+**.pyc
