@@ -1,4 +1,4 @@
-# Video Transcription Pipeline (Vosk, Punctuator2, Languagetool)
+# Video Transcription Pipeline (Vosk, Punctuator2, Languagetool, support german)
 
 This project is a quick video transcription pipeline for me to use in university.
 Input a folder of videos and get out transcriptions with medium quality and additionally punctuations and grammar checking done.
@@ -18,9 +18,10 @@ pip install -r ./requirements.txt
 ### Download German vosk model
 
 ```bash
-wget https://alphacephei.com/vosk/models/vosk-model-de-0.6.zip
-unzip vosk-model-de-0.6.zip
-mv vosk-model-de-0.6 voskModel
+wget https://alphacephei.com/vosk/models/vosk-model-de-0.21.zip
+unzip vosk-model-de-0.21.zip
+mv vosk-model-de-0.6/* voskModel
+rm vosk-model-de-0.6/
 ```
 
 ### Download German punctuator2 model
