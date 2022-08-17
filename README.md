@@ -7,6 +7,14 @@ A focus was easy and working setup as opposed to [some projects](https://github.
 
 ## Setup (Linux)
 
+### Download
+
+Clone the repo **with its git submodule**:
+
+```bash
+git clone --recursive https://github.com/DavidM42/Video-Transcription-Pipeline.git
+```
+
 ### Python environment setup
 
 ```bash
