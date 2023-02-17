@@ -22,7 +22,7 @@ tool = language_tool_python.LanguageTool('de-DE')
 
 SetLogLevel(-1)
 
-if not os.path.exists('voskModel'):
+if not os.path.exists('voskModelBig'):
     print('Please follow the voskSetupInstruction.md file in this repo to install vosk.')
     exit(1)
 
@@ -31,7 +31,7 @@ if not os.path.exists('punctuatorModel'):
     exit(1)
 
 sample_rate = 16000
-model = Model('voskModel')
+model = Model('voskModelBig')
 rec = KaldiRecognizer(model, sample_rate)
 rec.SetWords(True)
 
@@ -101,6 +101,8 @@ def transcribe(fileName):
     # correct by reading punctuated, finding matches then apply correction
     with open(punctuated_readable_path, "r") as puncutatedTmpFile:
         punctuated = puncutatedTmpFile.read()
+    # TODO only use rules that are whitelistet about upper/lowercase
+    # see https://community.languagetool.org/rule/list?offset=0&max=10&lang=de&filter=&categoryFilter=Gro%C3%9F-%2FKleinschreibung&_action_list=Filter for that
     matches = tool.check(punctuated)
     punctuated_and_corrected = tool.correct(punctuated)
 
