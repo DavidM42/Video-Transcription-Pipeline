@@ -1,12 +1,8 @@
 # main speech recognition module
-vosk
+openai-whisper
 
 # webvtt subtitle module
 webvtt-py
 
 # grammar check
 language_tool_python
-
-# prerequisites for punctuator2 included via submodule
-numpy
-theano

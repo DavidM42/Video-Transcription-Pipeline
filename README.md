@@ -1,18 +1,20 @@
-# Video Transcription Pipeline (Vosk, Punctuator2, Languagetool, support german)
+# Video Transcription Pipeline (Whisper, Languagetool, supports german)
 
-This project is a quick video transcription pipeline for me to use in university.
-Input a folder of videos and get out transcriptions with medium quality and additionally punctuations and grammar checking done.
-Pipeline script file can be easily edited to grammar check subtitles output or other adaptions.
+This project is a quick video transcription pipeline for me (and you) to use in university.
+Input a folder of videos and get out transcriptions (plus subtitle files) with additional grammar checking done.
+Pipeline script file can be easily edited to grammar check subtitles too, output different formats or other adaptions.
 A focus was easy and working setup as opposed to [some projects](https://github.com/uhh-lt/subtitle2go) I got inspired by while developing this and struggled to set up.
+
+The current second version of this tool utilizes the advanced speech recognition model called [**whisper**](https://github.com/openai/whisper) built by OpenAI.
 
 ## Setup (Linux)
 
 ### Download
 
-Clone the repo **with its git submodule**:
+Clone the repo:
 
 ```bash
-git clone --recursive https://github.com/DavidM42/Video-Transcription-Pipeline.git
+git clone https://github.com/DavidM42/Video-Transcription-Pipeline.git
 ```
 
 ### Python environment setup
@@ -21,23 +23,6 @@ git clone --recursive https://github.com/DavidM42/Video-Transcription-Pipeline.g
 virtualenv -p python3 venv
 source venv/bin/activate
 pip install -r ./requirements.txt
-```
-
-### Download German vosk model
-
-```bash
-wget https://alphacephei.com/vosk/models/vosk-model-de-0.21.zip
-unzip vosk-model-de-0.21.zip
-mv vosk-model-de-0.6/* voskModel
-rm vosk-model-de-0.6/
-```
-
-### Download German punctuator2 model
-
-```bash
-cd punctuatorModel
-wget http://ltdata1.informatik.uni-hamburg.de/subtitle2go/Model_subs_norm1_filt_5M_tageschau_euparl_h256_lr0.02.pcl
-cd ..
 ```
 
 ## Execute
@@ -49,6 +34,3 @@ source venv/bin/activate
 python pipeline.py
 ```
 
-## Contributions
-
-Thanks to the [Language Technology Group, Universität Hamburg (UHH)](https://github.com/uhh-lt) for providing the used punctuator2 model.
