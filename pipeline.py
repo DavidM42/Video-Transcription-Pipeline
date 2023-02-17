@@ -67,6 +67,34 @@ def transcribe(fileName):
             results.append(rec.Result())
     results.append(rec.FinalResult())
 
+    ############ Save plain text file too as transcript  ###############
+
+    rawText = ''
+    for i, res in enumerate(results):
+        text = json.loads(res).get('text')
+        rawText = rawText + ' ' + text
+
+    with open(f'{transcriptionsPath}/{fileName}-[raw-asr].txt', "w") as file1:
+        file1.write(rawText)
+
+    # punctuate
+    command = f'echo "{rawText}" | python punctuator2/punctuator.py punctuatorModel/Model_subs_norm1_filt_5M_tageschau_euparl_h256_lr0.02.pcl "{tmp_punctuate_path}"'
+    os.system(command)
+    punctuated_readable_path = f'{transcriptionsPath}/{fileName}-[punctuated].txt'
+    second_command = f'python punctuator2/convert_to_readable.py "{tmp_punctuate_path}" "{punctuated_readable_path}"'
+    os.system(second_command)
+
+    # correct by reading punctuated, finding matches then apply correction
+    with open(punctuated_readable_path, "r") as puncutatedTmpFile:
+        punctuated = puncutatedTmpFile.read()
+    # TODO only use rules that are whitelistet about upper/lowercase
+    # see https://community.languagetool.org/rule/list?offset=0&max=10&lang=de&filter=&categoryFilter=Gro%C3%9F-%2FKleinschreibung&_action_list=Filter for that
+    matches = tool.check(punctuated)
+    punctuated_and_corrected = tool.correct(punctuated)
+
+    with open(f'{transcriptionsPath}/{fileName}-[punctuated-grammar-corrected].txt', "w") as file1:
+        file1.write(punctuated_and_corrected)
+
     ############# Create webtvv subtitle file ###########
     vtt = WebVTT()
     for i, res in enumerate(results):
@@ -83,33 +111,7 @@ def transcribe(fileName):
 
     # save webvtt
     vtt.save(f'{transcriptionsPath}/{fileName}')
-    
-    ############ Save plain text file too as transcript  ###############
 
-    rawText = ''
-    for i, res in enumerate(results):
-        text = json.loads(res).get('text')
-        rawText = rawText + ' ' + text
-
-    # punctuate
-    command = f'echo "{rawText}" | python punctuator2/punctuator.py punctuatorModel/Model_subs_norm1_filt_5M_tageschau_euparl_h256_lr0.02.pcl {tmp_punctuate_path}'
-    os.system(command)
-    punctuated_readable_path = f'{transcriptionsPath}/{fileName}-[punctuated].txt'
-    second_command = f'python punctuator2/convert_to_readable.py {tmp_punctuate_path} {punctuated_readable_path}'
-    os.system(second_command)
-
-    # correct by reading punctuated, finding matches then apply correction
-    with open(punctuated_readable_path, "r") as puncutatedTmpFile:
-        punctuated = puncutatedTmpFile.read()
-    # TODO only use rules that are whitelistet about upper/lowercase
-    # see https://community.languagetool.org/rule/list?offset=0&max=10&lang=de&filter=&categoryFilter=Gro%C3%9F-%2FKleinschreibung&_action_list=Filter for that
-    matches = tool.check(punctuated)
-    punctuated_and_corrected = tool.correct(punctuated)
-
-    with open(f'{transcriptionsPath}/{fileName}-[raw-asr].txt', "w") as file1:
-        file1.write(rawText)
-    with open(f'{transcriptionsPath}/{fileName}-[punctuated-grammar-corrected].txt', "w") as file1:
-        file1.write(punctuated_and_corrected)
 
 def loop_all_videos():
     fileNames = list_files_in_video_dir()
